@@ -16,8 +16,24 @@ const defaultLoggers = {
 				text: figures.pointerSmall,
 				styles: 'grey'
 			}
+		]
+	},
+	debug: {
+		styling: [
+			{
+				text: () => `[${new Date().toLocaleTimeString()}]`,
+				styles: 'grey'
+			},
+			{
+				text: 'debug',
+				styles: ['yellow', 'underline']
+			},
+			{
+				text: figures.pointerSmall,
+				styles: 'grey'
+			}
 		],
-		enabled: true
+		enabled: false
 	}
 };
 
@@ -31,6 +47,10 @@ export default class Logger {
 	}
 
 	_createMessage(objectIn) {
+		if (typeof objectIn !== 'object') {
+			return objectIn;
+		}
+
 		let string = '';
 
 		objectIn.forEach(object => {
@@ -49,7 +69,6 @@ export default class Logger {
 			if (typeof object.text === 'string') {
 				string += chalkInstance(object.text) + ' ';
 			} else {
-				console.log(JSON.stringify(object));
 				string += chalkInstance(object.text()) + ' ';
 			}
 		});
@@ -68,11 +87,14 @@ export default class Logger {
 
 		const logger = this.loggers[loggerName];
 
-		console.log('logger:', JSON.stringify(logger));
+		if (logger.enabled === false) {
+			return;
+		}
 
 		let string = '';
 
 		string += this._createMessage(logger.styling);
+		string += this._createMessage(messageIn);
 
 		console.log(string);
 	}
