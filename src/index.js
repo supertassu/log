@@ -1,66 +1,12 @@
-import figures from 'figures';
 import chalk from 'chalk';
-
-const defaultLoggers = {
-	info: {
-		styling: [
-			{
-				text: () => `[${new Date().toLocaleTimeString()}]`,
-				styles: 'grey'
-			},
-			{
-				text: 'info',
-				styles: ['blue', 'underline']
-			},
-			{
-				text: figures.pointerSmall,
-				styles: 'grey'
-			}
-		]
-	},
-	warn: {
-		styling: [
-			{
-				text: () => `[${new Date().toLocaleTimeString()}]`,
-				styles: 'grey'
-			},
-			{
-				text: 'warning',
-				styles: ['yellow', 'underline']
-			},
-			{
-				text: figures.pointerSmall,
-				styles: 'grey'
-			}
-		]
-	},
-	debug: {
-		styling: [
-			{
-				text: () => `[${new Date().toLocaleTimeString()}]`,
-				styles: 'grey'
-			},
-			{
-				text: 'debug',
-				styles: ['magenta', 'underline']
-			},
-			{
-				text: figures.pointerSmall,
-				styles: 'grey'
-			}
-		],
-		enabled: process.env.NODE_ENV !== 'production'
-	},
-	disabled: {
-		styling: [],
-		enabled: false
-	}
-};
+import defaultLoggers from './defaults';
 
 export default class Logger {
 	output = console.log;
 
 	loggers = undefined;
+
+	enabled = true;
 
 	constructor() {
 		this.setLoggers(defaultLoggers);
@@ -86,10 +32,10 @@ export default class Logger {
 				throw new TypeError('INVALID_TYPE ' + typeof object.styles);
 			}
 
-			if (typeof object.text === 'string') {
-				string += chalkInstance(object.text) + ' ';
-			} else {
+			if (typeof object.text === 'function') {
 				string += chalkInstance(object.text()) + ' ';
+			} else {
+				string += chalkInstance(object.text) + ' ';
 			}
 		});
 
@@ -98,6 +44,22 @@ export default class Logger {
 
 	setLoggers = loggers => {
 		this.loggers = loggers;
+	}
+
+	addLogger = (name, logger) => {
+		this.loggers[name] = logger;
+	}
+
+	addLoggers = loggers => {
+		this.loggers = Object.assign({}, this.loggers, loggers);
+	}
+
+	removeLogger = name => {
+		this.loggers[name] = undefined;
+	}
+
+	resetLoggers = () => {
+		this.loggers = defaultLoggers;
 	}
 
 	log = (loggerName, messageIn) => {
@@ -111,7 +73,19 @@ export default class Logger {
 
 		const logger = this.loggers[loggerName];
 
-		if (logger.enabled === false) {
+		if (typeof logger.enabled === 'function') {
+			if (!logger.enabled()) {
+				return false;
+			}
+		} else if (logger.enabled === false) {
+			return false;
+		}
+
+		if (typeof this.enabled === 'function') {
+			if (!this.enabled()) {
+				return false;
+			}
+		} else if (this.enabled === false) {
 			return false;
 		}
 

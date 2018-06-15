@@ -2,13 +2,13 @@
 	"name": "@tassu/log",
 	"version": "0.0.1",
 	"description": "Even more hackable console logger.",
-	"main": "build.js",
+	"main": "build/index.js",
 	"repository": "git@github.com:supertassu/log.git",
 	"author": "Tassu <log@tassu.me>",
 	"license": "MIT",
 	"private": false,
 	"scripts": {
-		"build": "babel index.js > build.js",
+		"build": "babel src --out-dir build",
 		"test": "npm run build && xo && ava"
 	},
 	"dependencies": {
@@ -26,6 +26,9 @@
 		"xo": "^0.21.1"
 	},
 	"xo": {
-		"parser": "babel-eslint"
+		"parser": "babel-eslint",
+		"ignores": [
+			"build"
+		]
 	}
 }

@@ -25,10 +25,50 @@ test('does not fail if all is fine', t => {
 	t.true(t.context.log.log('info', 'eyy'));
 });
 
-test('does not print anything if logger is disabled', t => {
+test('does not print anything if logger is disabled (1)', t => {
 	t.context.log.output = () => {
 		t.fail('something was printed');
 	};
 
+	t.context.log.addLogger('disabled', {
+		styling: [],
+		enabled: false
+	}
+	);
+
 	t.false(t.context.log.log('disabled', 'ayey'));
+});
+
+test('does not print anything if logger is disabled (2)', t => {
+	t.context.log.output = () => {
+		t.fail('something was printed');
+	};
+
+	t.context.log.addLogger('disabled', {
+		styling: [],
+		enabled: () => false
+	}
+	);
+
+	t.false(t.context.log.log('disabled', 'ayey'));
+});
+
+test('does not print anything if logger is globally disabled (1)', t => {
+	t.context.log.output = () => {
+		t.fail('something was printed');
+	};
+
+	t.context.log.enabled = false;
+
+	t.false(t.context.log.log('info', 'ayey'));
+});
+
+test('does not print anything if logger is globally disabled (2)', t => {
+	t.context.log.output = () => {
+		t.fail('something was printed');
+	};
+
+	t.context.log.enabled = () => false;
+
+	t.false(t.context.log.log('info', 'ayey'));
 });
