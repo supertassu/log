@@ -18,6 +18,22 @@ const defaultLoggers = {
 			}
 		]
 	},
+	warn: {
+		styling: [
+			{
+				text: () => `[${new Date().toLocaleTimeString()}]`,
+				styles: 'grey'
+			},
+			{
+				text: 'warning',
+				styles: ['yellow', 'underline']
+			},
+			{
+				text: figures.pointerSmall,
+				styles: 'grey'
+			}
+		]
+	},
 	debug: {
 		styling: [
 			{
@@ -26,13 +42,17 @@ const defaultLoggers = {
 			},
 			{
 				text: 'debug',
-				styles: ['yellow', 'underline']
+				styles: ['magenta', 'underline']
 			},
 			{
 				text: figures.pointerSmall,
 				styles: 'grey'
 			}
 		],
+		enabled: process.env.NODE_ENV !== 'production'
+	},
+	disabled: {
+		styling: [],
 		enabled: false
 	}
 };
@@ -46,7 +66,7 @@ export default class Logger {
 		this.setLoggers(defaultLoggers);
 	}
 
-	_createMessage(objectIn) {
+	_createMessage = objectIn => {
 		if (typeof objectIn !== 'object') {
 			return objectIn;
 		}
@@ -76,19 +96,23 @@ export default class Logger {
 		return string;
 	}
 
-	setLoggers(loggers) {
+	setLoggers = loggers => {
 		this.loggers = loggers;
 	}
 
-	log(loggerName, messageIn) {
+	log = (loggerName, messageIn) => {
 		if (!this.loggers[loggerName]) {
 			throw new Error('LOGGER_NOT_FOUND');
+		}
+
+		if (!messageIn) {
+			throw new Error('NO_MESSAGE_SPECIFIED');
 		}
 
 		const logger = this.loggers[loggerName];
 
 		if (logger.enabled === false) {
-			return;
+			return false;
 		}
 
 		let string = '';
@@ -96,6 +120,7 @@ export default class Logger {
 		string += this._createMessage(logger.styling);
 		string += this._createMessage(messageIn);
 
-		console.log(string);
+		this.output(string);
+		return true;
 	}
 }
