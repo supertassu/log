@@ -1,0 +1,21 @@
+{
+  "name": "@tassu/log",
+  "version": "0.0.1",
+  "description": "Even more hackable console logger.",
+  "main": "build.js",
+  "repository": "git@github.com:supertassu/log.git",
+  "author": "Tassu <log@tassu.me>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "babel index.js > build.js"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/node": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
+    "chalk": "^2.4.1",
+    "figures": "^2.0.0"
+  }
+}
