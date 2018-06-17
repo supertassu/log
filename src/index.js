@@ -28,8 +28,6 @@ export default class Logger {
 				object.styles.forEach(element => {
 					chalkInstance = chalkInstance[element];
 				});
-			} else {
-				throw new TypeError('INVALID_TYPE ' + typeof object.styles);
 			}
 
 			if (typeof object.text === 'function') {

@@ -1,5 +1,5 @@
 {
-	"name": "@tassu/log",
+	"name": "@itassu/log",
 	"version": "0.0.0",
 	"description": "Even more hackable console logger.",
 	"main": "build/index.js",
