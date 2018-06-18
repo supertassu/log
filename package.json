@@ -1,6 +1,6 @@
 {
 	"name": "@itassu/log",
-	"version": "0.0.3",
+	"version": "0.1.0",
 	"description": "Even more hackable console logger.",
 	"main": "build/index.js",
 	"repository": "git@github.com:supertassu/log.git",
