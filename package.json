@@ -13,6 +13,10 @@
 		"prepublish": "yarn test && yarn build"
 	},
 	"dependencies": {
+		"chalk": "^2.4.1",
+		"figures": "^2.0.0"
+	},
+	"devDependencies": {
 		"@babel/cli": "^7.0.0-beta.51",
 		"@babel/core": "^7.0.0-beta.51",
 		"@babel/node": "^7.0.0-beta.51",
@@ -20,10 +24,6 @@
 		"@babel/preset-env": "^7.0.0-beta.51",
 		"@babel/register": "^7.0.0-beta.51",
 		"babel-eslint": "^8.2.3",
-		"chalk": "^2.4.1",
-		"figures": "^2.0.0"
-	},
-	"devDependencies": {
 		"ava": "1.0.0-beta.6",
 		"xo": "^0.21.1"
 	},
