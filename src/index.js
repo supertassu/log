@@ -20,20 +20,21 @@ export default class Logger {
 		let string = '';
 
 		objectIn.forEach(object => {
-			let chalkInstance = chalk;
+			let chalkInstance;
 
 			if (typeof object.styles === 'string') {
-				chalkInstance = chalkInstance[object.styles];
+				chalkInstance = chalk[object.styles];
 			} else if (typeof object.styles === 'object') {
+				chalkInstance = chalk;
 				object.styles.forEach(element => {
 					chalkInstance = chalkInstance[element];
 				});
 			}
 
-			if (typeof object.text === 'function') {
-				string += chalkInstance(object.text()) + ' ';
+			if (chalkInstance) {
+				string += chalkInstance(typeof object.text === 'function' ? object.text() : object.text) + ' ';
 			} else {
-				string += chalkInstance(object.text) + ' ';
+				string += (typeof object.text === 'function' ? object.text() : object.text) + ' ';
 			}
 		});
 
